@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
+    <!-- Action -->
     <record model="ir.actions.act_window" id="estate_property_type_action">
         <field name="name">Property Type</field>
         <field name="res_model">estate.property.type</field>
