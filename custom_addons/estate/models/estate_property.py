@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import AccessError, UserError, ValidationError
 
 
 class EstateProperty(models.Model):
@@ -42,7 +43,8 @@ class EstateProperty(models.Model):
         ],
         required=True,
         copy=False,
-        default='new'
+        default='new',
+        readonly=True
     )
     property_type_id = fields.Many2one("estate.property.type", string="Type")
     seller_id = fields.Many2one(
@@ -81,3 +83,15 @@ class EstateProperty(models.Model):
         else:
             self.garden_area = 10
             self.garden_orientation = "north"
+
+    def action_cancel(self):
+        if self.state == "sold":
+            raise UserError("Sold Properties can't be canceled!")
+        else:
+            self.state = "canceled"
+
+    def action_sold(self):
+        if self.state == "canceled":
+            raise UserError("Canceled Properties can't be sold!")
+        else:
+            self.state = "sold"
