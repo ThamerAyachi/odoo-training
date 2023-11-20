@@ -7,7 +7,6 @@
         <field name="view_mode">kanban,tree,form</field>
     </record>
 
-
     <!-- Tree -->
     <record model="ir.ui.view" id="estate_property_view_tree">
         <field name="name">estate.proprty.tree</field>
@@ -50,7 +49,6 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="state" />
                             <field name="property_type_id" />
                             <field name="postcode" />
                             <field name="date_availability" />

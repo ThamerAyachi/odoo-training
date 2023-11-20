@@ -3,6 +3,8 @@
 
 from odoo import models, fields, api
 from datetime import date, datetime, timedelta
+from odoo.tools import float_compare
+from odoo.exceptions import AccessError, UserError, ValidationError
 
 
 class EstatePropertyOffer(models.Model):
@@ -56,3 +58,20 @@ class EstatePropertyOffer(models.Model):
 
     def action_refuse(self):
         self.status = "refused"
+
+    _sql_constraints = [
+        (
+            "check_offer_price",
+            "CHECK(price >= 0)",
+            "An Offer price must be strictly positive"
+        )
+    ]
+
+    @api.constrains('property_id', 'price')
+    def _check_price(self):
+        percent = self.property_id.expected_price - \
+            (self.property_id.expected_price/10)
+        if float_compare(self.price, percent, precision_digits=1) >= 0:
+            return True
+        else:
+            raise ValidationError("Selling Price should'nt be lower over 10%")
