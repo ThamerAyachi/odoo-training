@@ -11,6 +11,7 @@ class EstateProperty(models.Model):
 
     _name = "estate.property"
     _description = "Estate Property Class Description"
+    _order = "id desc"
 
     name = fields.Char(required=True)
     description = fields.Text()
@@ -46,7 +47,8 @@ class EstateProperty(models.Model):
         default='new',
         readonly=True
     )
-    property_type_id = fields.Many2one("estate.property.type", string="Type")
+    property_type_id = fields.Many2one(
+        "estate.property.type", string="Property Type")
     seller_id = fields.Many2one(
         "res.users", string="Salesman", default=lambda self: self.env.user)
     buyer_id = fields.Many2one("res.partner", copy=False, string="Bayer")
@@ -75,7 +77,7 @@ class EstateProperty(models.Model):
             else:
                 record.best_price = max(offer_price)
 
-    @api.onchange("garden", "garden_area", "garden_orientation")
+    @api.onchange("garden")
     def _onchange_garden(self):
         if not self.garden:
             self.garden_area = None

@@ -12,6 +12,7 @@ class EstatePropertyOffer(models.Model):
 
     _name = "estate.property.offer"
     _description = "Offer for estate property"
+    _order = "price desc"
 
     price = fields.Float()
     status = fields.Selection(
@@ -27,6 +28,8 @@ class EstatePropertyOffer(models.Model):
     create_date = fields.Date('Create Date')
     date_deadline = fields.Date(
         'Deadline', compute="_compute_deadline", inverse="_inverse_deadline")
+    property_type_id = fields.Many2one(
+        related='property_id.property_type_id', store=True)
 
     @api.depends('create_date', 'validity')
     def _compute_deadline(self):
