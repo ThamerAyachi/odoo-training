@@ -115,3 +115,10 @@ class EstateProperty(models.Model):
             "A property name must be Unique"
         )
     ]
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_delete_property(self):
+        for record in self:
+            if record.state in ('new', 'canceled'):
+                return True
+            raise UserError("Only new and canceled property can delete!")
